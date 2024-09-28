@@ -5,6 +5,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "http://localhost:3002",
+  "https://nexus-ecommerce-v1.vercel.app/",
 ]; // Add more origins as needed
 
 export function middleware(req: NextRequest) {
