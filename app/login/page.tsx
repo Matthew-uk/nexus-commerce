@@ -21,7 +21,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
-const API_URI = process.env.API_URI || `http://localhost:3000`;
+// const API_URI = process.env.API_URI || `http://localhost:3000`;
+const API_URI = process.env.API_URI;
 
 const schema = z.object({
   email: z
