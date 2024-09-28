@@ -7,7 +7,7 @@ export const getUserData = async () => {
     const sessionToken = localStorage.getItem("session_token");
     if (sessionToken) {
       try {
-        const response = await axios.get(`${API_URI}/api/auth/getUser`, {
+        const response = await axios.get(`/api/auth/getUser`, {
           headers: {
             Authorization: `Bearer ${sessionToken}`,
           },
