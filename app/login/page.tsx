@@ -58,7 +58,7 @@ export default function Login() {
       setErrorMessage(null);
 
       const response = await axios.post(
-        `https://nexus-ecommerce-v1.vercel.app/api/auth/login`,
+        `/api/auth/login`,
         {
           email: data.email,
           password: data.password,

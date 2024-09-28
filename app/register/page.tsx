@@ -78,7 +78,7 @@ export default function Registration() {
     try {
       console.log(data);
       // Send a POST request to your API
-      const response = await axios.post(`${API_URI}/api/auth/signup`, {
+      const response = await axios.post(`/api/auth/signup`, {
         fullName: data.name,
         email: data.email,
         phoneNumber: data.phoneNumber,

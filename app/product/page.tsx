@@ -48,16 +48,13 @@ const AllProductsPage = () => {
     // Always fetch products, even without authentication
     const fetchProducts = async () => {
       try {
-        const productResponse = await axios.get(
-          `${API_URI}/api/store/getProducts`,
-          {
-            headers: sessionToken
-              ? {
-                  Authorization: `Bearer ${sessionToken}`,
-                }
-              : undefined, // No token if not authenticated
-          },
-        );
+        const productResponse = await axios.get(`/api/store/getProducts`, {
+          headers: sessionToken
+            ? {
+                Authorization: `Bearer ${sessionToken}`,
+              }
+            : undefined, // No token if not authenticated
+        });
         setProducts(productResponse.data);
       } catch (err) {
         console.error("Error fetching products:", err);

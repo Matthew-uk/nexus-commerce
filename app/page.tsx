@@ -28,11 +28,14 @@ const AllProductsPage = () => {
     const fetchUserData = async () => {
       if (sessionToken) {
         try {
-          const userResponse = await axios.get(`${API_URI}/api/auth/getUser`, {
-            headers: {
-              Authorization: `Bearer ${sessionToken}`,
+          const userResponse = await axios.get(
+            `https://nexus-ecommerce-v1.vercel.app/api/auth/getUser`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionToken}`,
+              },
             },
-          });
+          );
           setUser(userResponse.data);
         } catch (err) {
           console.error("Error fetching user data:", err);
@@ -45,7 +48,7 @@ const AllProductsPage = () => {
     const fetchProducts = async () => {
       try {
         const productResponse = await axios.get(
-          `${API_URI}/api/store/getProducts`,
+          `https://nexus-ecommerce-v1.vercel.app/api/store/getProducts`,
           {
             headers: sessionToken
               ? {
