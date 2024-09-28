@@ -21,7 +21,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
-const API_URI = `http://127.0.0.1:3000/api/auth`;
+const API_URI = process.env.API_URI || `http://localhost:3000`;
 
 const schema = z.object({
   email: z
@@ -57,7 +57,7 @@ export default function Login() {
       setErrorMessage(null);
 
       const response = await axios.post(
-        `${API_URI}/login`,
+        `${API_URI}/api/auth/login`,
         {
           email: data.email,
           password: data.password,

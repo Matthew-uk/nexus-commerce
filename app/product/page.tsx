@@ -6,7 +6,7 @@ import Navbar from "@/components/ui/custom/navbar";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/ui/custom/loader"; // Import the Loader component
 
-const API_URI = `http://127.0.0.1:5000`;
+const API_URI = process.env.API_URI || `http://localhost:3000`;
 
 interface Product {
   id: number;
@@ -32,7 +32,7 @@ const AllProductsPage = () => {
     const fetchUserData = async () => {
       if (sessionToken) {
         try {
-          const userResponse = await axios.get(`${API_URI}/user`, {
+          const userResponse = await axios.get(`${API_URI}/api/auth/getUser`, {
             headers: {
               Authorization: `Bearer ${sessionToken}`,
             },
@@ -48,13 +48,16 @@ const AllProductsPage = () => {
     // Always fetch products, even without authentication
     const fetchProducts = async () => {
       try {
-        const productResponse = await axios.get(`${API_URI}/product`, {
-          headers: sessionToken
-            ? {
-                Authorization: `Bearer ${sessionToken}`,
-              }
-            : undefined, // No token if not authenticated
-        });
+        const productResponse = await axios.get(
+          `${API_URI}/api/store/getProducts`,
+          {
+            headers: sessionToken
+              ? {
+                  Authorization: `Bearer ${sessionToken}`,
+                }
+              : undefined, // No token if not authenticated
+          },
+        );
         setProducts(productResponse.data);
       } catch (err) {
         console.error("Error fetching products:", err);

@@ -20,7 +20,7 @@ import {
 import Link from "next/link";
 import Navbar from "@/components/ui/custom/navbar";
 
-const API_URI = `http://localhost:3000/api`;
+const API_URI = process.env.API_URI || `http://localhost:3000`;
 
 const phoneRegex = /^\+?[1-9]\d{1,14}$/; // E.164 format for phone number
 
@@ -78,7 +78,7 @@ export default function Registration() {
     try {
       console.log(data);
       // Send a POST request to your API
-      const response = await axios.post(`${API_URI}/auth/signup`, {
+      const response = await axios.post(`${API_URI}/api/auth/signup`, {
         fullName: data.name,
         email: data.email,
         phoneNumber: data.phoneNumber,

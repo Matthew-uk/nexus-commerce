@@ -18,7 +18,7 @@ import Image from "next/image";
 import { IProduct } from "@/models/product";
 import { useToken, useOwner } from "@/hooks/useToken";
 
-const API_URI = `http://localhost:3000`;
+const API_URI = process.env.API_URI || `http://localhost:3000`;
 
 const SingleProductPage = () => {
   const { product_id } = useParams();

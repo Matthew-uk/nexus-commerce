@@ -8,7 +8,7 @@ import Loader from "@/components/ui/custom/loader"; // Import the Loader compone
 import { IProduct } from "@/models/product";
 import { IUser } from "@/models/user";
 
-const API_URI = `http://127.0.0.1:3000`;
+const API_URI = process.env.API_URI || `http://localhost:3000`;
 
 interface User {
   username: string;
