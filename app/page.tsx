@@ -28,14 +28,11 @@ const AllProductsPage = () => {
     const fetchUserData = async () => {
       if (sessionToken) {
         try {
-          const userResponse = await axios.get(
-            `https://nexus-ecommerce-v1.vercel.app/api/auth/getUser`,
-            {
-              headers: {
-                Authorization: `Bearer ${sessionToken}`,
-              },
+          const userResponse = await axios.get(`/api/auth/getUser`, {
+            headers: {
+              Authorization: `Bearer ${sessionToken}`,
             },
-          );
+          });
           setUser(userResponse.data);
         } catch (err) {
           console.error("Error fetching user data:", err);
@@ -47,16 +44,13 @@ const AllProductsPage = () => {
     // Always fetch products, even without authentication
     const fetchProducts = async () => {
       try {
-        const productResponse = await axios.get(
-          `https://nexus-ecommerce-v1.vercel.app/api/store/getProducts`,
-          {
-            headers: sessionToken
-              ? {
-                  Authorization: `Bearer ${sessionToken}`,
-                }
-              : undefined, // No token if not authenticated
-          },
-        );
+        const productResponse = await axios.get(`/api/store/getProducts`, {
+          headers: sessionToken
+            ? {
+                Authorization: `Bearer ${sessionToken}`,
+              }
+            : undefined, // No token if not authenticated
+        });
         setProducts(productResponse.data.products);
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -80,13 +74,13 @@ const AllProductsPage = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className='flex items-center justify-center h-screen'>
-        <div>{error}</div>
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className='flex items-center justify-center h-screen'>
+  //       <div>{error}</div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
