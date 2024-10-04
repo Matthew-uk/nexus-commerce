@@ -1,70 +1,76 @@
 "use client";
 
-import { ShoppingCart, Search, Menu } from "lucide-react";
+import { ShoppingCart, Search, Menu, Home, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { getUserData, handleLogout } from "@/lib/getUser";
-import { User } from "@/components/types";
-import useUserStore from "@/store/store";
 import { IUser } from "@/models/user";
+import useUserStore from "@/store/store";
 
-const Navbar = () => {
+const BottomNavbar = () => {
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
   const { setFullName, setPhoneNumber, setId } = useUserStore();
+
   useEffect(() => {
     const fetchUser = async () => {
       const userData: IUser = await getUserData();
       setCurrentUser(userData);
-      setFullName(userData.fullName);
-      setPhoneNumber(userData.phoneNumber);
-      setId(userData.id);
+      setFullName(userData && userData.fullName);
+      setPhoneNumber(userData && userData.phoneNumber);
+      setId(userData && userData.id);
     };
     fetchUser();
-  }, []);
-  // return <Search className='h-6 w-6 text-gray-400 cursor-pointer' />;
+  }, [setFullName, setPhoneNumber, setId]);
 
   return (
-    <header className='sticky top-0 z-50 bg-white shadow-md'>
-      <div className='container mx-auto px-4 py-4 flex items-center justify-between'>
-        <div className='flex items-center space-x-4'>
-          <Menu className='h-6 w-6 cursor-pointer md:hidden' />
-          <h1 className='text-2xl font-bold text-primary'>
-            <Link href='/'>NexusMart</Link>
-          </h1>
-        </div>
-        <nav className='hidden md:flex space-x-4'>
-          <Link href='/' className='text-gray-600 hover:text-primary'>
-            Home
-          </Link>
-          <Link href='/about' className='text-gray-600 hover:text-primary'>
-            About
-          </Link>
-          {currentUser ? (
-            <p
-              onClick={handleLogout}
-              className='text-gray-600 hover:text-primary cursor-pointer'>
-              Logout
-            </p>
-          ) : (
-            <Link href='/login' className='text-gray-600 hover:text-primary'>
-              Login
+    <nav className='fixed bottom-0 left-0 right-0 z-50 bg-white shadow-md'>
+      <div className='container mx-auto px-4 py-2'>
+        <ul className='flex items-center justify-between'>
+          <li>
+            <Link
+              href='/'
+              className='flex flex-col items-center text-gray-600 hover:text-primary'>
+              <Home className='h-6 w-6' />
+              <span className='text-xs mt-1'>Home</span>
             </Link>
-          )}
-          {/* <Link href='login' className='text-gray-600 hover:text-primary'>
-            Account Login
-          </Link> */}
-        </nav>
-        <div className='flex flex-row gap-4'>
-          {/* <Search className='h-6 w-6 text-gray-400 cursor-pointer' /> */}
-          {/* <p className='text-lg'>{currentUser?.username}</p> */}
-          <Link href='/cart'>
-            <ShoppingCart className='h-6 w-6 text-gray-400 cursor-pointer' />
-          </Link>
-        </div>
+          </li>
+          <li>
+            <Link
+              href='/search'
+              className='flex flex-col items-center text-gray-600 hover:text-primary'>
+              <Search className='h-6 w-6' />
+              <span className='text-xs mt-1'>Search</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href='/cart'
+              className='flex flex-col items-center text-gray-600 hover:text-primary'>
+              <ShoppingCart className='h-6 w-6' />
+              <span className='text-xs mt-1'>Cart</span>
+            </Link>
+          </li>
+          <li>
+            {currentUser ? (
+              <button
+                onClick={handleLogout}
+                className='flex flex-col items-center text-gray-600 hover:text-primary'>
+                <User className='h-6 w-6' />
+                <span className='text-xs mt-1'>Logout</span>
+              </button>
+            ) : (
+              <Link
+                href='/login'
+                className='flex flex-col items-center text-gray-600 hover:text-primary'>
+                <User className='h-6 w-6' />
+                <span className='text-xs mt-1'>Login</span>
+              </Link>
+            )}
+          </li>
+        </ul>
       </div>
-    </header>
+    </nav>
   );
 };
 
-export default Navbar;
+export default BottomNavbar;

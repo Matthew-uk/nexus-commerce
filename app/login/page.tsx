@@ -88,7 +88,7 @@ export default function Login() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className='container mx-auto px-4 py-8 flex justify-center items-center min-h-screen'>
         <Card className='w-full max-w-md'>
           <CardHeader className='space-y-1'>

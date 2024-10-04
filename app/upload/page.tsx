@@ -1,24 +1,26 @@
 "use client";
-// app/upload/page.tsx
 
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import Image from "next/image";
 import React, { useState } from "react";
-// import { toast } from "react-toastify";
 
 const Page = () => {
   const [imageUrl, setImageUrl] = useState<string>("");
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]; // Get the first file
     if (file) {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", file); // Append the file to formData
+
       try {
-        const response = await axios.post("/api/upload", formData);
-        console.log("File uploaded successfully!");
-        console.log(response.data);
-        setImageUrl(response.data.fileUrl);
+        // Post formData to the backend API route
+        const response = await axios.post("/api/uploadImage", formData);
+
+        // Log success and set the image URL from response
+        console.log("File uploaded successfully!", response.data);
+        setImageUrl(response.data.fileUrl); // Use the returned file URL
       } catch (error) {
         console.error("Failed to upload file. Please try again.");
         console.error(error);
@@ -34,7 +36,10 @@ const Page = () => {
         onChange={handleFileUpload}
         accept='.png, .jpg, .jpeg, .pdf'
       />
-      {imageUrl && <Image src={imageUrl} alt='' width={250} height={100} />}
+      {/* Render the image if the imageUrl state is set */}
+      {imageUrl && (
+        <Image src={imageUrl} alt='Uploaded file' width={250} height={100} />
+      )}
     </div>
   );
 };

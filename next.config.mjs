@@ -1,14 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	async redirects() {
-		return [
-			{
-				source: '/products',
-				destination: '/',
-				permanent: true,
-			},
-		];
-	},
+  images: {
+    domains: ["storage.googleapis.com"], // Add your Google Cloud Storage domain here
+  },
+  async redirects() {
+    return [
+      {
+        source: "/products",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
