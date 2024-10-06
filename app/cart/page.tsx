@@ -39,7 +39,7 @@ export default function ShoppingCart() {
         const token = localStorage.getItem("session_token"); // Assuming token is stored in localStorage
         const response = await axios.get("/api/store/getWishlist", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ₦{token}`,
           },
         });
 
@@ -85,7 +85,7 @@ export default function ShoppingCart() {
         { productId: id },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ₦{token}`,
           },
         },
       );
@@ -157,11 +157,11 @@ export default function ShoppingCart() {
                         <div className='flex justify-between text-base font-medium text-gray-900'>
                           <h3>{item.name}</h3>
                           <p className='ml-4'>
-                            ${(item.price * item.quantity).toLocaleString()}
+                            ₦{(item.price * item.quantity).toLocaleString()}
                           </p>
                         </div>
                         <p className='mt-1 text-sm text-gray-500'>
-                          ${item.price.toLocaleString()} each
+                          ₦{item.price.toLocaleString()} each
                         </p>
                       </div>
                       <div className='flex-1 flex items-end justify-between text-sm'>
@@ -188,7 +188,7 @@ export default function ShoppingCart() {
                             <Plus className='h-4 w-4' />
                           </Button>
                           <Button className='ml-4'>
-                            <Link href={`/product/${item.id}`}>
+                            <Link href={`/product/₦{item.id}`}>
                               View Details
                             </Link>
                           </Button>
@@ -217,16 +217,16 @@ export default function ShoppingCart() {
               <div className='space-y-4'>
                 <div className='flex justify-between'>
                   <span>Subtotal</span>
-                  <span>${subtotal.toLocaleString()}</span>
+                  <span>₦{subtotal.toLocaleString()}</span>
                 </div>
                 <div className='flex justify-between'>
                   <span>Shipping</span>
-                  <span>${shipping.toLocaleString()}</span>
+                  <span>₦{shipping.toLocaleString()}</span>
                 </div>
                 <Separator />
                 <div className='flex justify-between font-semibold'>
                   <span>Total</span>
-                  <span>${total.toLocaleString()}</span>
+                  <span>₦{total.toLocaleString()}</span>
                 </div>
               </div>
               <Button className='w-full mt-6' disabled={cartItems.length === 0}>
