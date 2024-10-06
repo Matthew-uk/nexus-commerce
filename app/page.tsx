@@ -9,6 +9,7 @@ import { IProduct } from "@/models/product";
 import { IUser } from "@/models/user";
 import { Heart, HeartPulse } from "lucide-react"; // Icons for wishlist
 import { toast } from "react-toastify"; // For notifications
+import { IoIosHeart } from "react-icons/io";
 
 const API_URI = process.env.API_URI || `http://localhost:3000`;
 
@@ -80,7 +81,7 @@ const AllProductsPage = () => {
       if (isInWishlist) {
         // Remove from wishlist
         await axios.post(
-          `/api/user/removeFromWishlist`,
+          `/api/store/removeFromWishlist`,
           { productId },
           {
             headers: {
@@ -97,7 +98,7 @@ const AllProductsPage = () => {
       } else {
         // Add to wishlist
         await axios.post(
-          `/api/user/addToWishlist`,
+          `/api/store/addWishList`,
           { productId },
           {
             headers: {
@@ -133,11 +134,11 @@ const AllProductsPage = () => {
   return (
     <>
       <Navbar />
-      <div className='container mx-auto px-4 py-8'>
+      <div className='container mx-auto px-4 py-8 mb-10'>
         <h1 className='text-3xl font-bold mb-4'>All Products</h1>
         {user && (
           <div className='mb-4'>
-            <p>Welcome, {user.fullName}!</p>
+            <p>Welcome, {user?.fullName}!</p>
           </div>
         )}
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8'>
@@ -164,10 +165,13 @@ const AllProductsPage = () => {
                     className='flex items-center'
                     onClick={() => toggleWishlist(String(product._id))}>
                     {wishlist.has(String(product._id)) ? (
-                      <HeartPulse className='text-red-500' size={23} />
+                      <IoIosHeart
+                        className='text-red-500 duration-300'
+                        size={23}
+                      />
                     ) : (
-                      <Heart
-                        className='text-gray-500 hover:text-red-500 duration-300'
+                      <IoIosHeart
+                        className='text-gray-500 hover:text-red-300 duration-300'
                         size={23}
                       />
                     )}

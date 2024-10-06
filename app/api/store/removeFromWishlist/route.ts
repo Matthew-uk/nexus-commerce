@@ -46,24 +46,32 @@ export async function POST(req: NextRequest) {
     // Find the wishlist for this user
     let wishlist = await Wishlist.findOne({ user: user._id });
 
-    // If no wishlist exists, create one
+    // If no wishlist exists, return error
     if (!wishlist) {
-      wishlist = new Wishlist({ user: user._id, products: [] });
+      return NextResponse.json(
+        { message: "Wishlist not found" },
+        { status: 404 },
+      );
     }
 
-    // Check if the product is already in the wishlist
+    // Check if the product is in the wishlist
     const productIndex = wishlist.products.indexOf(product._id);
     if (productIndex === -1) {
-      // Add to wishlist
-      wishlist.products.push(product._id);
-    } else {
-      // Remove from wishlist
-      wishlist.products.splice(productIndex, 1);
+      return NextResponse.json(
+        { message: "Product not in wishlist" },
+        { status: 400 },
+      );
     }
+
+    // Remove the product from the wishlist
+    wishlist.products.splice(productIndex, 1);
 
     await wishlist.save();
 
-    return NextResponse.json({ message: "Wishlist updated" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Product removed from wishlist" },
+      { status: 200 },
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongoose";
 import Wishlist from "@/models/wishlist";
 import User from "@/models/user";
+import jwt from "jsonwebtoken";
 
 export async function GET(req: NextRequest) {
   const sessionToken = req.headers.get("Authorization")?.split(" ")[1];
@@ -13,8 +14,13 @@ export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
 
-    // Find the user by their session token
-    const user = await User.findOne({ token: sessionToken });
+    const decoded = jwt.verify(
+      sessionToken,
+      (process.env.JWT_SECRET as string) || "rasengan...",
+    ) as { id: string };
+
+    // Find the user by ID
+    const user = await User.findById(decoded.id);
 
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
