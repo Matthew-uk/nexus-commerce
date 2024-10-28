@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Poppins } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+import NextTopLoader from "nextjs-toploader";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
@@ -38,6 +39,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.className} antialiased`}>
         <ToastContainer className={"font-poppins"} />
+        <NextTopLoader />
         {children}
       </body>
     </html>

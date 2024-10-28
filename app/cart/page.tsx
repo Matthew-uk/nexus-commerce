@@ -39,7 +39,7 @@ export default function ShoppingCart() {
         const token = localStorage.getItem("session_token"); // Assuming token is stored in localStorage
         const response = await axios.get("/api/store/getWishlist", {
           headers: {
-            Authorization: `Bearer ₦{token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -79,13 +79,17 @@ export default function ShoppingCart() {
 
   const removeItem = async (id: string) => {
     try {
-      const token = localStorage.getItem("session_token"); // Get the token from local storage
+      const token = localStorage.getItem("session_token");
+      if (!token) {
+        setError("Login to see your Wishlist");
+        return false;
+      }
       await axios.post(
         `/api/store/removeFromWishlist`,
         { productId: id },
         {
           headers: {
-            Authorization: `Bearer ₦{token}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );

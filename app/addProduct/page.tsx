@@ -37,9 +37,15 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/ui/custom/navbar";
 import useUserStore from "@/store/store";
+import Loader from "@/components/ui/custom/loader";
 
 interface FileWithPreview extends File {
   preview: string;
+}
+
+interface NewFilePreview {
+  fileId: string;
+  fileUrl: string;
 }
 
 export default function EnhancedAddProductPage() {
@@ -51,6 +57,7 @@ export default function EnhancedAddProductPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [imageLoading, setImageLoading] = useState(false);
   const router = useRouter(); // Initialize useRouter hook
   const { id } = useUserStore();
 
@@ -67,7 +74,8 @@ export default function EnhancedAddProductPage() {
     });
 
     try {
-      const response = await axios.post("/api/upload", formData, {
+      setImageLoading(true);
+      const response = await axios.post("/api/uploadImage", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -75,14 +83,16 @@ export default function EnhancedAddProductPage() {
 
       setImages((prevImages) => [
         ...prevImages,
-        ...response.data.fileUrls.map((url: string) => ({
-          preview: url,
+        ...response.data.fileUrls.map((url: NewFilePreview) => ({
+          preview: url.fileUrl,
         })),
       ]);
-
+      console.log("This is the images", images);
       console.log("Files uploaded successfully!", response.data);
     } catch (error) {
       console.error("Failed to upload files. Please try again.", error);
+    } finally {
+      setImageLoading(false);
     }
   }, []);
 
@@ -253,6 +263,7 @@ export default function EnhancedAddProductPage() {
                     Drag & drop images here, or click to select files
                   </p>
                 </div>
+                {imageLoading && <Loader className='py-6' />}
                 {errors.images && (
                   <p className='text-red-500 text-sm'>{errors.images}</p>
                 )}

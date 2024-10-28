@@ -1,52 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
-import { bucket } from "@/lib/firebaseadmin"; // Import your Firebase Admin SDK
-import { v4 as uuidv4 } from "uuid"; // For generating unique file names
+import { storage } from "@/lib/appwrite"; // Import your Appwrite configuration
+import env from "@/app/env";
 
 export const POST = async (req: NextRequest) => {
   try {
     const formData = await req.formData();
-    const file = formData.get("file") as File;
+    const files = formData.getAll("files") as File[]; // Get all files, supporting one or more
 
-    if (!file) {
-      return NextResponse.json({ error: "No file received." }, { status: 400 });
+    if (!files || files.length === 0) {
+      return NextResponse.json(
+        { error: "No files received.", files },
+        { status: 400 },
+      );
     }
 
-    // Generate a unique filename
-    const uniqueFileName = `${uuidv4()}_${file.name}`;
+    const storageKey = env.appwrite.storageKey;
+    const uploadedFiles = [];
 
-    // Create a reference to the Firebase Storage bucket
-    const fileRef = bucket.file(`uploads/${uniqueFileName}`);
+    // Loop through all files and upload each one
+    for (const file of files) {
+      // Upload each file to Appwrite storage with proper permissions
+      const result = await storage.createFile(
+        storageKey, // Your Appwrite bucket ID
+        "unique()", // Automatically generate a valid file ID
+        file,
+      );
 
-    // Create a buffer from the file data
-    const buffer = Buffer.from(await file.arrayBuffer());
+      // Get the file ID and generate the public URL
+      const fileId = result.$id;
+      const fileUrl = storage.getFileView(storageKey, fileId);
 
-    // Handle the file upload to Firebase Storage using a Promise
-    await new Promise<void>((resolve, reject) => {
-      const stream = fileRef.createWriteStream({
-        metadata: {
-          contentType: file.type,
-        },
-        resumable: false,
-      });
+      uploadedFiles.push({ fileId, fileUrl });
+    }
 
-      stream.on("finish", resolve);
-      stream.on("error", reject);
-      stream.end(buffer); // End the stream by writing the buffer
-    });
-
-    // Once the upload is complete, get the public URL of the file
-    const [metadata] = await fileRef.getMetadata();
-    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${metadata.name}`;
-
-    // Return a success response with the file URL
+    // Return a success response with the list of uploaded file URLs
     return NextResponse.json(
-      { success: true, fileUrl: publicUrl },
+      { success: true, fileUrls: uploadedFiles },
       { status: 201 },
     );
   } catch (error) {
-    console.error("Error uploading file:", error);
+    console.error("Error uploading files:", error);
     return NextResponse.json(
-      { error: "Failed to upload file." },
+      { error: "Failed to upload files." },
       { status: 500 },
     );
   }
