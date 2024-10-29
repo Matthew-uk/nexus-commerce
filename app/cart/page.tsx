@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Minus, Plus, X, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { FaArrowRight } from "react-icons/fa6";
 import Link from "next/link";
 import Navbar from "@/components/ui/custom/navbar";
 import axios from "axios";
@@ -105,7 +106,7 @@ export default function ShoppingCart() {
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
-  const shipping = 10; // Flat rate shipping
+  const shipping = 0; // Flat rate shipping
   const total = subtotal + shipping;
 
   if (loading) {
@@ -123,7 +124,7 @@ export default function ShoppingCart() {
   return (
     <>
       <Navbar />
-      <div className='container mx-auto px-4 py-8'>
+      <div className='container mx-auto px-4 py-8 mb-10'>
         <h1 className='text-3xl font-bold mb-8'>Your Shopping Cart</h1>
 
         <div className='flex flex-col lg:flex-row gap-8'>
@@ -165,12 +166,12 @@ export default function ShoppingCart() {
                           </p>
                         </div>
                         <p className='mt-1 text-sm text-gray-500'>
-                          ₦{item.price.toLocaleString()} each
+                          ₦{item.price.toLocaleString()}
                         </p>
                       </div>
                       <div className='flex-1 flex items-end justify-between text-sm'>
-                        <div className='flex items-center'>
-                          <Button
+                        <div className='flex items-center mt-3'>
+                          {/* <Button
                             variant='outline'
                             size='icon'
                             className='h-8 w-8'
@@ -190,10 +191,12 @@ export default function ShoppingCart() {
                               updateQuantity(item.id, item.quantity + 1)
                             }>
                             <Plus className='h-4 w-4' />
-                          </Button>
-                          <Button className='ml-4'>
-                            <Link href={`/product/₦{item.id}`}>
-                              View Details
+                          </Button> */}
+                          <Button className='bg-transparent text-green-600 hover:bg-transparent/5 duration-150 shadow-none'>
+                            <Link
+                              href={`/product/₦{item.id}`}
+                              className='flex items-center justify-between'>
+                              View Details <FaArrowRight className='ml-3' />
                             </Link>
                           </Button>
                         </div>
@@ -219,26 +222,26 @@ export default function ShoppingCart() {
             <div className='bg-gray-50 rounded-lg shadow-sm p-6'>
               <h2 className='text-lg font-semibold mb-4'>Order Summary</h2>
               <div className='space-y-4'>
-                <div className='flex justify-between'>
+                {/* <div className='flex justify-between'>
                   <span>Subtotal</span>
                   <span>₦{subtotal.toLocaleString()}</span>
                 </div>
                 <div className='flex justify-between'>
                   <span>Shipping</span>
                   <span>₦{shipping.toLocaleString()}</span>
-                </div>
+                </div> */}
                 <Separator />
-                <div className='flex justify-between font-semibold'>
+                <div className='flex justify-between font-medium'>
                   <span>Total</span>
                   <span>₦{total.toLocaleString()}</span>
                 </div>
               </div>
-              <Button className='w-full mt-6' disabled={cartItems.length === 0}>
+              {/* <Button className='w-full mt-6' disabled={cartItems.length === 0}>
                 Proceed to Checkout
               </Button>
               <Button variant='outline' className='w-full mt-4' asChild>
                 <Link href='/'>Continue Shopping</Link>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

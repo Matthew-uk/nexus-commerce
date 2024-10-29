@@ -3,6 +3,8 @@
 import { ShoppingCart, Search, Menu, Home, User } from "lucide-react";
 // import { HomeIcon } from "@radix-ui/react-icons";
 import { IoHomeOutline } from "react-icons/io5";
+import { CiCirclePlus } from "react-icons/ci";
+import { GoPlusCircle } from "react-icons/go";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getUserData, handleLogout } from "@/lib/getUser";
@@ -42,6 +44,14 @@ const BottomNavbar = () => {
               className='flex flex-col items-center text-gray-600 hover:text-primary'>
               <Search className='h-6 w-6' />
               <span className='text-xs mt-1'>Search</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href='/addProduct'
+              className='flex flex-col items-center text-gray-600 hover:text-primary'>
+              <GoPlusCircle className='h-6 w-6' />
+              <span className='text-xs mt-1'>Add Product</span>
             </Link>
           </li>
           <li>
