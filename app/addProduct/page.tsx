@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { Plus, Upload, X, CheckCircle, Loader2 } from "lucide-react"; // Add Loader2 for a spinner
@@ -38,6 +38,8 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/ui/custom/navbar";
 import useUserStore from "@/store/store";
 import Loader from "@/components/ui/custom/loader";
+import { IUser } from "@/models/user";
+import { getUserData } from "@/lib/getUser";
 
 interface FileWithPreview extends File {
   preview: string;
@@ -58,8 +60,27 @@ export default function EnhancedAddProductPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // Add loading state
   const [imageLoading, setImageLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter(); // Initialize useRouter hook
   const { id } = useUserStore();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData: IUser = await getUserData();
+        if (!userData) {
+          return false;
+        }
+        console.log(userData);
+        setIsLoggedIn(true);
+        return true;
+      } catch (error) {
+        console.log(error);
+        setIsLoggedIn(false);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const newImages = acceptedFiles.map((file) =>
@@ -133,9 +154,12 @@ export default function EnhancedAddProductPage() {
 
   const confirmSubmit = async () => {
     setIsLoading(true); // Start loading
-
     const data = { name, description, price, category, images, userId: id };
     try {
+      if (!isLoggedIn) {
+        alert("Please Login to add your product!");
+        return false;
+      }
       const response = await axios.post("/api/store/createProduct", data);
       console.log("Product created successfully!", response.data);
       if (response.status === 200) {
@@ -339,6 +363,26 @@ export default function EnhancedAddProductPage() {
               </p>
               <p>
                 <strong>Images:</strong> {images.length} uploaded
+                <div className='flex gap-4 w-2/3'>
+                  {images.map((image, index) => (
+                    <div key={index} className='relative group'>
+                      <Image
+                        src={image.preview}
+                        alt={`Preview ${index + 1}`}
+                        width={100}
+                        height={100}
+                        className='h-20 w-20 object-cover rounded-md'
+                      />
+                      <button
+                        type='button'
+                        className='absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full group-hover:opacity-100 opacity-0 transition-opacity'
+                        onClick={() => removeImage(index)}
+                        aria-label='Remove image'>
+                        <X className='w-4 h-4' />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </p>
             </div>
 
