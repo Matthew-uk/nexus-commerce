@@ -47,14 +47,6 @@ const ProductSchema: Schema = new Schema(
       type: [Object], // Array of image URLs
       required: true,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User", // Refers to the User model
