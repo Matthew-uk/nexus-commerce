@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     await connectToDatabase(); // Ensure the database is connected
 
     // Fetch all products from the database
-    const products = await Product.find({});
+    const products = await Product.find({}).exec();
 
     // Return the products as the response
     return NextResponse.json({ status: 200, products });
@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
     console.error("Error fetching products:", error);
     return NextResponse.json({
       status: 500,
-      message: "Internal Server Error",
-      error: error.message,
+      message: "Error fetching products",
+      error,
     });
   }
 }
