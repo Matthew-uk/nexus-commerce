@@ -10,8 +10,14 @@ export async function GET(req: NextRequest) {
     // Fetch all products from the database
     const products = await Product.find({}).exec();
 
-    // Return the products as the response
-    return NextResponse.json({ status: 200, products });
+    const response = NextResponse.json({ status: 200, products });
+
+    // Disable caching for this route
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    response.headers.set('Expires', '0');
+    response.headers.set('Pragma', 'no-cache');
+
+    return response;
   } catch (error: any) {
     console.error("Error fetching products:", error);
     return NextResponse.json({
