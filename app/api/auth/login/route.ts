@@ -48,10 +48,10 @@ export async function POST(req: NextRequest) {
     response.headers.set("Authorization", `Bearer ${token}`);
 
     return response;
-  } catch (error) {
+  } catch (error:any) {
     console.error(error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { message: "Error ocurred while logging in", error },
       { status: 500 },
     );
   }

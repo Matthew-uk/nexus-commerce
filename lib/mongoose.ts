@@ -1,8 +1,6 @@
 import mongoose, { Connection } from "mongoose";
 
-const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  "mongodb+srv://esaduviedede:pa$$w0rd@nexus-ecommerce.tc25j.mongodb.net/?retryWrites=true&w=majority&appName=nexus-ecommerce";
+const MONGODB_URI = "mongodb+srv://esaduviedede:pa$$w0rd@nexus-ecommerce.tc25j.mongodb.net/?retryWrites=true&w=majority&appName=nexus-ecommerce";
 
 if (!MONGODB_URI) {
   throw new Error(
