@@ -47,7 +47,7 @@ const SingleProductPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/store/getProduct?id=${product_id}`,
+          `/api/store/getProduct/${product_id}`,
         );
         setProduct(response.data.product);
 
