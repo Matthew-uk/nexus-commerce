@@ -9,8 +9,7 @@ export async function GET(req: NextRequest) {
     await connectToDatabase(); // Ensure the database is connected
 
     // Extract the product ID from the request URL (e.g., /api/product?id=12345)
-    const { searchParams } = new URL(req.url);
-    const productId = searchParams.get("id");
+    const productId = req.nextUrl.searchParams.get("id");
     console.log(productId);
 
     // Check if a valid product ID was provided
