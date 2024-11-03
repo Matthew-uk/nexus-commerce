@@ -1,9 +1,10 @@
-// pages/api/auth/getUser.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import connectToDatabase from "@/lib/mongoose";
 import User from "@/models/user";
+
+export const dynamic = "force-dynamic"; // Ensure dynamic rendering
+export const revalidate = 0; // Avoid caching
 
 export async function GET(req: NextRequest) {
   try {

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongoose";
 import User from "@/models/user"; // Assuming you have an owner model
 
-export const runtime = 'nodejs'; // Ensure it's executed server-side
+export const dynamic = "force-dynamic"; // Ensure dynamic rendering
+export const revalidate = 0; // Disable caching
 
 export async function GET(req: NextRequest) {
   try {
@@ -25,7 +26,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: "Owner not found" }, { status: 404 });
     }
 
-    // Send the owner data (without sensitive information if any)
+    // Send the owner data (without sensitive information)
     const { _id, name, email, phoneNumber } = owner;
     return NextResponse.json(
       {

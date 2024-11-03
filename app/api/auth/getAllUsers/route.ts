@@ -1,9 +1,9 @@
-// pages/api/auth/getUsers.ts
-
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import connectToDatabase from "@/lib/mongoose";
 import User from "@/models/user";
+
+export const dynamic = "force-dynamic"; // Ensure dynamic rendering
+export const revalidate = 0; // Avoid caching
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,18 +19,11 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    if (authorizationHeader.toLocaleLowerCase() !== "esaduviedede@gmail.com") {
+    // Extract the token from the Bearer authorization header
+    const token = authorizationHeader.split(" ")[1];
+    if (!token || token.toLowerCase() !== "esaduviedede@gmail.com") {
       return NextResponse.json({ message: "Invalid Token" }, { status: 401 });
     }
-
-    // // Verify the token
-    // const decoded = jwt.verify(
-    //   token,
-    //   (process.env.JWT_SECRET as string) || "rasengan...",
-    // ) as { id: string };
-
-    // Check user permissions here if needed
-    // Example: if (decoded.role !== 'Admin') { ... }
 
     // Fetch all users from the database
     const users = await User.find().select({
