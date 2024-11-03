@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongoose";
 import User from "@/models/user"; // Assuming you have an owner model
 
+export const runtime = 'nodejs'; // Ensure it's executed server-side
+
 export async function GET(req: NextRequest) {
   try {
     // Connect to the database
